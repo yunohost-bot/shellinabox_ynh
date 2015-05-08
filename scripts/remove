@@ -13,6 +13,9 @@ sudo apt-get remove --purge -y -qq shellinabox || echo "ShellInABox already unin
 # Remove Shell In A Box configuration
 sudo rm -f  /etc/default/shellinabox
 
+# Remove service
+sudo yunohost service remove shellinabox
+
 # Remove Nginx proxy configuration
 sudo rm -f /etc/nginx/conf.d/$domain.d/shellinabox.conf
 
