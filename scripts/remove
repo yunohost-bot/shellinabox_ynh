@@ -8,11 +8,12 @@ path=$(sudo yunohost app setting shellinabox path)
 
 # Stop and remove shellinabox
 sudo service shellinabox stop || echo "ShellInABox already stopped"
-sudo apt-get remove --purge shellinabox || echo "ShellInABox already uninstalled"
+sudo apt-get remove --purge -y -qq shellinabox || echo "ShellInABox already uninstalled"
+
+# Remove Shell In A Box configuration
+sudo rm -f  /etc/default/shellinabox
 
 # Remove Nginx proxy configuration
-sudo rm -f sudo rm /etc/nginx/conf.d/$domain.d/shellinabox.conf
+sudo rm -f /etc/nginx/conf.d/$domain.d/shellinabox.conf
 
 sudo service nginx reload
-
-sudo yunohost app ssowatconf
