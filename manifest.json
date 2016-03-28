@@ -1,6 +1,7 @@
 {
   "name": "Shell In A Box",
   "id": "shellinabox",
+  "packaging_format": 1,
   "description": {
     "en": "Web based AJAX terminal emulator",
     "fr": "Émulateur de terminal web"
