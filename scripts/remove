@@ -19,4 +19,5 @@ sudo yunohost service remove shellinabox
 # Remove Nginx proxy configuration
 sudo rm -f /etc/nginx/conf.d/$domain.d/shellinabox.conf
 
+# Restart nginx
 sudo service nginx reload

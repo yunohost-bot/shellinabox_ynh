@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# causes the shell to exit if any subcommand or pipeline returns a non-zero status
+set -e
+
+# Retrieve arguments
+app="shellinabox"
+domain=$(sudo yunohost app setting $app domain)
+path=$(sudo yunohost app setting $app path)
+
+# Remove trailing slash to path
+path=${path%/}
+
+# Check domain/path availability
+sudo yunohost app checkurl $domain$path -a $app \
+  || (echo "Path not available: $domain$path" && exit 1)
+
+# Check port availability
+sudo yunohost app checkport 4200 \
+    || (echo "Port not available: 4200" && exit 1)
+
+# Check configuration files
+NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
+[[ -f $NGINX_CONF ]] && die \
+"The NGINX configuration already exists at '${NGINX_CONF}'.
+ You should safely delete it before restoring this app."
+
+# Restore configuration files
+sudo cp -a ./conf/nginx.conf "$NGINX_CONF"
+
+# Reload Nginx and regenerate SSOwat conf
+sudo service nginx reload
+sudo yunohost app ssowatconf

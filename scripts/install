@@ -7,10 +7,12 @@ domain=$1
 path=$2
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a shellinabox
+sudo yunohost app checkurl $domain$path -a shellinabox \
+    || (echo "Path not available: $domain$path" && exit 1)
 
 # Check port availability
-sudo yunohost app checkport 4200
+sudo yunohost app checkport 4200 \
+    || (echo "Port not available: 4200" && exit 1)
 
 # Remove trailing "/" for next commands
 if [[ ! "$path" == "/" ]]; then
