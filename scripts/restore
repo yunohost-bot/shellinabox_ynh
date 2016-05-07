@@ -4,7 +4,8 @@
 set -e
 
 # Retrieve arguments
-app="shellinabox"
+app=${!#}
+
 domain=$(sudo yunohost app setting $app domain)
 path=$(sudo yunohost app setting $app path)
 
