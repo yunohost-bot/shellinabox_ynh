@@ -1,34 +1,59 @@
 #!/bin/bash
 
 # causes the shell to exit if any subcommand or pipeline returns a non-zero status
-set -e
+set -eu
+
+# Source app helpers
+source /usr/share/yunohost/helpers
+
+# Get multi-instances specific variables
+app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-app=${!#}
-
-domain=$(sudo yunohost app setting $app domain)
-path=$(sudo yunohost app setting $app path)
+domain=$(ynh_app_setting_get "$app" domain)
+path=$(ynh_app_setting_get "$app" path)
 
 # Remove trailing slash to path
 path=${path%/}
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a $app \
-  || (echo "Path not available: $domain$path" && exit 1)
+sudo yunohost app checkurl "${domain}${path}" -a "$app" \
+    || ynh_die "Path not available: ${domain}${path}"
 
 # Check port availability
 sudo yunohost app checkport 4200 \
-    || (echo "Port not available: 4200" && exit 1)
+    || ynh_die "Port not available: 4200"
 
 # Check configuration files
-NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
-[[ -f $NGINX_CONF ]] && die \
-"The NGINX configuration already exists at '${NGINX_CONF}'.
- You should safely delete it before restoring this app."
+nginx_conf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
+if [ -f $nginx_conf ]; then
+	ynh_die "The NGINX configuration already exists at '${nginx_conf}'. 
+	You should safely delete it before restoring this app."
+fi
+shellinabox_conf="/etc/default/${app}"
+if [ -f $shellinabox_conf ]; then
+	ynh_die "The shellinabox configuration already exists at '${shellinabox_conf}'. 
+	You should safely delete it before restoring this app."
+fi
+
+# if shellainbox is installed
+shellinabox_bin="/usr/bin/shellinaboxd"
+if [ -f $shellinabox_bin ]; then
+	ynh_die "Good! The shellinabox is installed"
+else
+	sudo apt-get update -qq
+	sudo apt-get install shellinabox -y -qq
+
+	sudo cp -a "./conf/default_${app}" "${shellinabox_conf}"
+
+	# Add service into YunoHost
+	sudo yunohost service add shellinabox
+	sudo service shellinabox restart
+fi
 
 # Restore configuration files
-sudo cp -a ./conf/nginx.conf "$NGINX_CONF"
+sudo cp -a ./conf/nginx.conf "${nginx_conf}"
 
-# Reload Nginx and regenerate SSOwat conf
-sudo service nginx reload
+# Reload service
+sudo systemctl reload nginx
 sudo yunohost app ssowatconf

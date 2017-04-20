@@ -1,14 +1,15 @@
 #!/bin/bash
 
-# causes the shell to exit if any subcommand or pipeline returns a non-zero status
-set -e
+# Exit on command errors and treat unset variables as an error
+set -eu
 
 # Source YNH helpers
 . /usr/share/yunohost/helpers
 
-app=${!#}
+# Get multi-instances specific variables
+app=$YNH_APP_INSTANCE_NAME
 
-domain=$(sudo yunohost app setting $app domain)
+domain=$(ynh_app_setting_get "$app" domain)
 
 # Backup directory location for the app from where the script is executed and 
 # which will be compressed afterward
@@ -16,4 +17,5 @@ backup_dir=$YNH_APP_BACKUP_DIR
 
 # Copy the conf files
 sudo mkdir -p ./conf
+ynh_backup "/etc/default/${app}" "./conf/default_${app}"
 ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf" ./conf/nginx.conf

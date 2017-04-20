@@ -1,18 +1,23 @@
 #!/bin/bash
 
-set -e
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+source /usr/share/yunohost/helpers # Source app helpers
 
 # Retrieve arguments
-domain=$1
-path=$2
+domain=$YNH_APP_ARG_DOMAIN
+path=$YNH_APP_ARG_PATH
+
+app=$YNH_APP_INSTANCE_NAME
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a shellinabox \
-    || (echo "Path not available: $domain$path" && exit 1)
+sudo yunohost app checkurl "${domain}${path}" -a "$app" \
+    || ynh_die "Path not available: ${domain}${path}"
 
 # Check port availability
 sudo yunohost app checkport 4200 \
-    || (echo "Port not available: 4200" && exit 1)
+    || ynh_die "Port not available: 4200"
 
 # Remove trailing "/" for next commands
 if [[ ! "$path" == "/" ]]; then
@@ -22,6 +27,7 @@ fi
 sudo apt-get update -qq
 sudo apt-get install shellinabox -y -qq
 
+# Add service into YunoHost
 sudo yunohost service add shellinabox
 
 # Copy shellinabox default configuration and restart
@@ -31,4 +37,4 @@ sudo service shellinabox restart
 # Configure Nginx and reload
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/shellinabox.conf
-sudo service nginx reload
+sudo systemctl reload nginx

@@ -1,23 +1,29 @@
 #!/bin/bash
 
-set -e
+# Exit on command errors and treat unset variables as an error
+set -u
+
+# Source app helpers
+source /usr/share/yunohost/helpers
+
+# Get multi-instances specific variables
+app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-domain=$(sudo yunohost app setting shellinabox domain)
-path=$(sudo yunohost app setting shellinabox path)
+domain=$(ynh_app_setting_get "$app" domain)
+path=$(ynh_app_setting_get "$app" path)
 
 # Stop and remove shellinabox
-sudo service shellinabox stop || echo "ShellInABox already stopped"
+sudo systemctl stop shellinabox || echo "ShellInABox already stopped"
 sudo apt-get remove --purge -y -qq shellinabox || echo "ShellInABox already uninstalled"
-
-# Remove Shell In A Box configuration
-sudo rm -f  /etc/default/shellinabox
 
 # Remove service
 sudo yunohost service remove shellinabox
 
+# Remove Shell In A Box configuration
+sudo rm -f  "/etc/default/${app}"
 # Remove Nginx proxy configuration
-sudo rm -f /etc/nginx/conf.d/$domain.d/shellinabox.conf
+[[ -n $domain ]] && sudo rm -f "/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
 # Restart nginx
-sudo service nginx reload
+sudo systemctl reload nginx
