@@ -1,21 +1,39 @@
 #!/bin/bash
 
-# Exit on command errors and treat unset variables as an error
+#=================================================
+# GENERIC START
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit on command errors and treat access to unset variables as an error
 set -eu
 
-# Source YNH helpers
-. /usr/share/yunohost/helpers
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Get multi-instances specific variables
+source /usr/share/yunohost/helpers
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get "$app" domain)
+domain=$(ynh_app_setting_get $app domain)
 
-# Backup directory location for the app from where the script is executed and 
-# which will be compressed afterward
-backup_dir=$YNH_APP_BACKUP_DIR
+#=================================================
+# STANDARD BACKUP STEPS
+#=================================================
+# BACKUP THE APP MAIN DIR
+#=================================================
 
-# Copy the conf files
-sudo mkdir -p ./conf
-ynh_backup "/etc/default/${app}" "./conf/default_${app}"
-ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf" ./conf/nginx.conf
+ynh_backup "/etc/shellinabox"
+ynh_backup "/etc/default/shellinabox"
+
+#=================================================
+# BACKUP THE NGINX CONFIGURATION
+#=================================================
+
+ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf"
