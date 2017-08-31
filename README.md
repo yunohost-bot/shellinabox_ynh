@@ -10,4 +10,4 @@ https://github.com/shellinabox/shellinabox
 
 ### Update
 
-`$ sudo yunohost app upgrade --verbose spip -u https://github.com/YunoHost-Apps/shellinabox_ynh.git`
+`$ sudo yunohost app upgrade --verbose shellinabox -u https://github.com/YunoHost-Apps/shellinabox_ynh.git`
