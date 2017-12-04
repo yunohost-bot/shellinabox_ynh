@@ -56,6 +56,12 @@ ynh_restore_file "/etc/default/shellinabox"
 systemctl restart shellinabox
 
 #=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
+
+yunohost service add $app
+
+#=================================================
 # GENERIC FINALIZATION
 #=================================================
 # RELOAD NGINX
