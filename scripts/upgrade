@@ -1,31 +1,61 @@
 #!/bin/bash
 
-# Exit on command errors and treat unset variables as an error
-set -eu
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Source app helpers
 source /usr/share/yunohost/helpers
 
-# Get multi-instances specific variables
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
 app=$YNH_APP_INSTANCE_NAME
 
-# Retrieve arguments
-domain=$(ynh_app_setting_get "$app" domain)
-path=$(ynh_app_setting_get "$app" path)
+domain=$(ynh_app_setting_get $app domain)
+path_url=$(ynh_app_setting_get $app path)
+port=$(ynh_app_setting_get $app port)
 
-# Remove trailing "/" for next commands
-if [[ ! "$path" == "/" ]]; then
-    path=${path%/}
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+
+# If port doesn't exist, create it
+if [ -z $port ]; then
+	port=4200
+	ynh_app_setting_set $app port $port
 fi
 
-sudo apt-get update -qq
-sudo apt-get install shellinabox -y -qq
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
 
-# Copy shellinabox default configuration and restart
-sudo cp ../conf/shellinabox /etc/default/shellinabox
-sudo service shellinabox restart
+ynh_backup_before_upgrade	# Backup the current version of the app
+ynh_clean_setup () {
+	ynh_restore_upgradebackup	# restore it if the upgrade fails
+}
+ynh_abort_if_errors	# Exit if an error occurs during the execution of the script
 
-# Configure Nginx and reload
-sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/shellinabox.conf
-sudo systemctl reload nginx
+#=================================================
+# CHECK THE PATH
+#=================================================
+
+# Normalize the URL path syntax
+path_url=$(ynh_normalize_url_path $path_url)
+
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx

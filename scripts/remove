@@ -1,29 +1,43 @@
 #!/bin/bash
 
-# Exit on command errors and treat unset variables as an error
-set -u
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Source app helpers
 source /usr/share/yunohost/helpers
 
-# Get multi-instances specific variables
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
 app=$YNH_APP_INSTANCE_NAME
 
-# Retrieve arguments
-domain=$(ynh_app_setting_get "$app" domain)
-path=$(ynh_app_setting_get "$app" path)
+domain=$(ynh_app_setting_get $app domain)
+port=$(ynh_app_setting_get $app port)
 
-# Stop and remove shellinabox
-sudo systemctl stop shellinabox || echo "ShellInABox already stopped"
-sudo apt-get remove --purge -y -qq shellinabox || echo "ShellInABox already uninstalled"
+#=================================================
+# STANDARD REMOVE
+#=================================================
+# REMOVE SERVICE FROM ADMIN PANEL
+#=================================================
 
-# Remove service
-sudo yunohost service remove shellinabox
+if yunohost service status | grep -q $app
+then
+	echo "Remove $app service"
+	yunohost service remove $app
+fi
 
-# Remove Shell In A Box configuration
-sudo rm -f  "/etc/default/${app}"
-# Remove Nginx proxy configuration
-[[ -n $domain ]] && sudo rm -f "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+#=================================================
+# REMOVE SHELLINABOX
+#=================================================
 
-# Restart nginx
-sudo systemctl reload nginx
+ynh_package_autopurge shellinabox
+
+#=================================================
+# REMOVE NGINX CONFIGURATION
+#=================================================
+
+# Remove the dedicated nginx config
+ynh_remove_nginx_config
