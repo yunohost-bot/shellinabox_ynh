@@ -2,7 +2,7 @@
 
 Shell In A Box implements a web server that can export arbitrary command line tools to a web based terminal emulator. This emulator is accessible to any JavaScript and CSS enabled web browser and does not require any additional browser plugins. Most typically, login shells would be exported this way:
 
-Source: [code.google.com/shellinabox/](https://code.google.com/p/shellinabox/)
+https://github.com/shellinabox/shellinabox
 
 ### Install
 
@@ -10,4 +10,4 @@ Source: [code.google.com/shellinabox/](https://code.google.com/p/shellinabox/)
 
 ### Update
 
-`$ sudo yunohost app upgrade --verbose spip -u https://github.com/YunoHost-Apps/shellinabox_ynh.git`
+`$ sudo yunohost app upgrade --verbose shellinabox -u https://github.com/YunoHost-Apps/shellinabox_ynh.git`

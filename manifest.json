@@ -2,19 +2,19 @@
   "name": "Shell In A Box",
   "id": "shellinabox",
   "packaging_format": 1,
-  "version": "1.1.0",
-  "license": "free",
-  "requirements": {
-    "yunohost": ">> 2.3.15"
-  },
    "description": {
     "en": "Web based AJAX terminal emulator",
     "fr": "Émulateur de terminal web"
   },
-  "url": "https://code.google.com/p/shellinabox/",
+  "version": "1.1.0",
+  "url": "https://github.com/shellinabox/shellinabox",
+  "license": "GPL-2.0",
   "maintainer": {
     "name": "kload",
     "email": "kload@kload.fr"
+  },
+  "requirements": {
+        "yunohost": ">= 2.7.2"
   },
   "multi_instance": false,
   "services": [

@@ -1,40 +1,99 @@
 #!/bin/bash
 
-# Exit on command errors and treat unset variables as an error
-set -eu
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-source /usr/share/yunohost/helpers # Source app helpers
+source /usr/share/yunohost/helpers
 
-# Retrieve arguments
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
+
 domain=$YNH_APP_ARG_DOMAIN
-path=$YNH_APP_ARG_PATH
+path_url=$YNH_APP_ARG_PATH
 
 app=$YNH_APP_INSTANCE_NAME
 
-# Check domain/path availability
-sudo yunohost app checkurl "${domain}${path}" -a "$app" \
-    || ynh_die "Path not available: ${domain}${path}"
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
 
-# Check port availability
-sudo yunohost app checkport 4200 \
-    || ynh_die "Port not available: 4200"
+# Normalize the url path syntax
+path_url=$(ynh_normalize_url_path $path_url)
 
-# Remove trailing "/" for next commands
-if [[ ! "$path" == "/" ]]; then
-    path=${path%/}
-fi
+# Check web path availability
+ynh_webpath_available $domain $path_url
+# Register (book) web path
+ynh_webpath_register $app $domain $path_url
 
-sudo apt-get update -qq
-sudo apt-get install shellinabox -y -qq
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
 
-# Add service into YunoHost
-sudo yunohost service add shellinabox
+ynh_app_setting_set $app domain $domain
+ynh_app_setting_set $app path $path_url
 
-# Copy shellinabox default configuration and restart
-sudo cp ../conf/shellinabox /etc/default/shellinabox
-sudo service shellinabox restart
+#=================================================
+# STANDARD MODIFICATIONS
+#=================================================
+# FIND AND OPEN A PORT
+#=================================================
 
-# Configure Nginx and reload
-sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/shellinabox.conf
-sudo systemctl reload nginx
+# Find a free port
+port=$(ynh_find_port 4200)
+ynh_app_setting_set $app port $port
+
+#=================================================
+# INSTALL SHELLINABOX
+#=================================================
+
+ynh_package_update
+ynh_package_install shellinabox
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+# CONFIGURE SHELLINABOX
+#=================================================
+
+cp ../conf/shellinabox /etc/default/shellinabox
+ynh_replace_string "__PORT__" "$port" "/etc/default/shellinabox"
+systemctl restart shellinabox
+
+#=================================================
+# STORE THE CHECKSUM OF THE CONFIG FILE
+#=================================================
+
+# Calculate and store the config file checksum into the app settings
+ynh_store_file_checksum "/etc/default/shellinabox"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
+
+yunohost service add $app
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx
