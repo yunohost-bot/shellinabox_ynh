@@ -15,4 +15,4 @@ SHELLINABOX_PORT=__PORT__
 #
 #   Beeps are disabled because of reports of the VLC plugin crashing
 #   Firefox on Linux/x86_64.
-SHELLINABOX_ARGS="--no-beep --localhost-only"
+SHELLINABOX_ARGS="--no-beep --localhost-only --disable-ssl"
