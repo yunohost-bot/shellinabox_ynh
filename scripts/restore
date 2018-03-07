@@ -56,6 +56,7 @@ ynh_restore_file "/etc/default/shellinabox"
 
 # Allow the service to log in syslog
 ynh_replace_string " -- -q --background" " -- --background" "/etc/init.d/shellinabox"
+systemctl daemon-reload
 
 systemctl restart shellinabox
 
