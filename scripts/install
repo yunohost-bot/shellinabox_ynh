@@ -75,6 +75,11 @@ ynh_add_nginx_config
 
 cp ../conf/shellinabox /etc/default/shellinabox
 ynh_replace_string "__PORT__" "$port" "/etc/default/shellinabox"
+
+# Allow the service to log in syslog
+ynh_replace_string " -- -q --background" " -- --background" "/etc/init.d/shellinabox"
+systemctl daemon-reload
+
 systemctl restart shellinabox
 
 #=================================================
