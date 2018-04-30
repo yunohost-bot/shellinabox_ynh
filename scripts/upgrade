@@ -59,3 +59,12 @@ ynh_add_nginx_config
 #=================================================
 
 systemctl reload nginx
+
+#=================================================
+# ALLOW THE SERVICE TO LOG IN SYSLOG
+#=================================================
+
+ynh_replace_string " -- -q --background" " -- --background" "/etc/init.d/shellinabox"
+systemctl daemon-reload
+
+systemctl restart shellinabox
