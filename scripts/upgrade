@@ -59,12 +59,25 @@ ynh_add_nginx_config
 #=================================================
 
 systemctl reload nginx
-
 #=================================================
-# ALLOW THE SERVICE TO LOG IN SYSLOG
+# CONFIGURE SHELLINABOX
 #=================================================
 
+# Verify the checksum and backup the file if it's different
+ynh_backup_if_checksum_is_different "/etc/default/shellinabox"
+
+cp ../conf/shellinabox /etc/default/shellinabox
+ynh_replace_string "__PORT__" "$port" "/etc/default/shellinabox"
+
+# Allow the service to log in syslog
 ynh_replace_string " -- -q --background" " -- --background" "/etc/init.d/shellinabox"
 systemctl daemon-reload
 
 systemctl restart shellinabox
+
+#=================================================
+# STORE THE CHECKSUM OF THE CONFIG FILE
+#=================================================
+
+# Calculate and store the config file checksum into the app settings
+ynh_store_file_checksum "/etc/default/shellinabox"
