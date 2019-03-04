@@ -11,6 +11,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_print_info "Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -21,6 +22,7 @@ port=$(ynh_app_setting_get $app port)
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
+ynh_print_info "Ensuring downward compatibility..."
 
 # If port doesn't exist, create it
 if [ -z "$port" ]; then
@@ -31,6 +33,7 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
+ynh_print_info "Backing up the app before upgrading (may take a while)..."
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -53,6 +56,7 @@ path_url=$(ynh_normalize_url_path $path_url)
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
+ynh_print_info "Upgrading nginx web server configuration..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -60,6 +64,7 @@ ynh_add_nginx_config
 #=================================================
 # CONFIGURE SHELLINABOX
 #=================================================
+ynh_print_info "Upgrading shellinabox configuration..."
 
 # Verify the checksum and backup the file if it's different
 ynh_backup_if_checksum_is_different "/etc/default/shellinabox"
@@ -83,6 +88,12 @@ ynh_store_file_checksum "/etc/default/shellinabox"
 #=================================================
 # RELOAD NGINX
 #=================================================
+ynh_print_info "Reloading nginx web server..."
 
 systemctl reload nginx
 
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info "Upgrade of $app completed"

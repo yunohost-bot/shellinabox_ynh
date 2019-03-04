@@ -11,6 +11,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_print_info "Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -33,12 +34,14 @@ fi
 #=================================================
 # REMOVE SHELLINABOX
 #=================================================
+ynh_print_info "Removing shellinabox"
 
 ynh_package_autopurge shellinabox
 
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
+ynh_print_info "Removing nginx web server configuration"
 
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
