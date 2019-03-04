@@ -23,7 +23,7 @@ port=$(ynh_app_setting_get $app port)
 #=================================================
 
 # If port doesn't exist, create it
-if [ -z $port ]; then
+if [ -z "$port" ]; then
 	port=4200
 	ynh_app_setting_set $app port $port
 fi
@@ -32,11 +32,14 @@ fi
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
 
-ynh_backup_before_upgrade	# Backup the current version of the app
+# Backup the current version of the app
+ynh_backup_before_upgrade
 ynh_clean_setup () {
-	ynh_restore_upgradebackup	# restore it if the upgrade fails
+	# restore it if the upgrade fails
+	ynh_restore_upgradebackup
 }
-ynh_abort_if_errors	# Exit if an error occurs during the execution of the script
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 #=================================================
 # CHECK THE PATH
@@ -54,11 +57,6 @@ path_url=$(ynh_normalize_url_path $path_url)
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-#=================================================
-# RELOAD NGINX
-#=================================================
-
-systemctl reload nginx
 #=================================================
 # CONFIGURE SHELLINABOX
 #=================================================
@@ -81,3 +79,10 @@ systemctl restart shellinabox
 
 # Calculate and store the config file checksum into the app settings
 ynh_store_file_checksum "/etc/default/shellinabox"
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx
+

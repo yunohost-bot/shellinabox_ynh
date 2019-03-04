@@ -23,9 +23,10 @@ port=$(ynh_app_setting_get $app port)
 # REMOVE SERVICE FROM ADMIN PANEL
 #=================================================
 
-if yunohost service status | grep -q $app
+# Remove a service from the admin panel, added by `yunohost service add`
+if yunohost service status $app >/dev/null 2>&1
 then
-	echo "Remove $app service"
+	ynh_print_info "Removing $app service"
 	yunohost service remove $app
 fi
 
