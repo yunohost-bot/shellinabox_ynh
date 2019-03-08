@@ -11,6 +11,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_print_info "Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -21,9 +22,10 @@ port=$(ynh_app_setting_get $app port)
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
+ynh_print_info "Ensuring downward compatibility..."
 
 # If port doesn't exist, create it
-if [ -z $port ]; then
+if [ -z "$port" ]; then
 	port=4200
 	ynh_app_setting_set $app port $port
 fi
@@ -31,12 +33,16 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
+ynh_print_info "Backing up the app before upgrading (may take a while)..."
 
-ynh_backup_before_upgrade	# Backup the current version of the app
+# Backup the current version of the app
+ynh_backup_before_upgrade
 ynh_clean_setup () {
-	ynh_restore_upgradebackup	# restore it if the upgrade fails
+	# restore it if the upgrade fails
+	ynh_restore_upgradebackup
 }
-ynh_abort_if_errors	# Exit if an error occurs during the execution of the script
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 #=================================================
 # CHECK THE PATH
@@ -50,18 +56,15 @@ path_url=$(ynh_normalize_url_path $path_url)
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
+ynh_print_info "Upgrading nginx web server configuration..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
 #=================================================
-# RELOAD NGINX
-#=================================================
-
-systemctl reload nginx
-#=================================================
 # CONFIGURE SHELLINABOX
 #=================================================
+ynh_print_info "Upgrading shellinabox configuration..."
 
 # Verify the checksum and backup the file if it's different
 ynh_backup_if_checksum_is_different "/etc/default/shellinabox"
@@ -81,3 +84,16 @@ systemctl restart shellinabox
 
 # Calculate and store the config file checksum into the app settings
 ynh_store_file_checksum "/etc/default/shellinabox"
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_print_info "Reloading nginx web server..."
+
+systemctl reload nginx
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info "Upgrade of $app completed"

@@ -27,18 +27,18 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
+ynh_print_info "Validating installation parameters..."
 
 # Normalize the url path syntax
 path_url=$(ynh_normalize_url_path $path_url)
 
-# Check web path availability
-ynh_webpath_available $domain $path_url
 # Register (book) web path
 ynh_webpath_register $app $domain $path_url
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
+ynh_print_info "Storing installation settings..."
 
 ynh_app_setting_set $app domain $domain
 ynh_app_setting_set $app path $path_url
@@ -48,6 +48,7 @@ ynh_app_setting_set $app path $path_url
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
+ynh_print_info "Looking for a free port..."
 
 # Find a free port
 port=$(ynh_find_port 4200)
@@ -56,6 +57,7 @@ ynh_app_setting_set $app port $port
 #=================================================
 # INSTALL SHELLINABOX
 #=================================================
+ynh_print_info "Installing shellinabox..."
 
 ynh_package_update
 ynh_package_install shellinabox
@@ -63,6 +65,7 @@ ynh_package_install shellinabox
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
+ynh_print_info "Configuring nginx web server..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -72,6 +75,7 @@ ynh_add_nginx_config
 #=================================================
 # CONFIGURE SHELLINABOX
 #=================================================
+ynh_print_info "Configuring shellinabox..."
 
 cp ../conf/shellinabox /etc/default/shellinabox
 ynh_replace_string "__PORT__" "$port" "/etc/default/shellinabox"
@@ -100,5 +104,12 @@ yunohost service add $app
 #=================================================
 # RELOAD NGINX
 #=================================================
+ynh_print_info "Reloading nginx web server..."
 
 systemctl reload nginx
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info "Installation of $app completed"

@@ -11,6 +11,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_print_info "Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -23,21 +24,24 @@ port=$(ynh_app_setting_get $app port)
 # REMOVE SERVICE FROM ADMIN PANEL
 #=================================================
 
-if yunohost service status | grep -q $app
+# Remove a service from the admin panel, added by `yunohost service add`
+if yunohost service status $app >/dev/null 2>&1
 then
-	echo "Remove $app service"
+	ynh_print_info "Removing $app service"
 	yunohost service remove $app
 fi
 
 #=================================================
 # REMOVE SHELLINABOX
 #=================================================
+ynh_print_info "Removing shellinabox"
 
 ynh_package_autopurge shellinabox
 
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
+ynh_print_info "Removing nginx web server configuration"
 
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
