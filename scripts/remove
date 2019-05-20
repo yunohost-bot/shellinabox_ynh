@@ -11,12 +11,12 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_print_info "Loading installation settings..."
+ynh_script_progression --message="Loading installation settings..." --weight=2
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get $app domain)
-port=$(ynh_app_setting_get $app port)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+port=$(ynh_app_setting_get --app=$app --key=port)
 
 #=================================================
 # STANDARD REMOVE
@@ -27,21 +27,27 @@ port=$(ynh_app_setting_get $app port)
 # Remove a service from the admin panel, added by `yunohost service add`
 if yunohost service status $app >/dev/null 2>&1
 then
-	ynh_print_info "Removing $app service"
+	ynh_script_progression --message="Removing $app service..."
 	yunohost service remove $app
 fi
 
 #=================================================
 # REMOVE SHELLINABOX
 #=================================================
-ynh_print_info "Removing shellinabox"
+ynh_script_progression --message="Removing shellinabox..." --weight=20
 
 ynh_package_autopurge shellinabox
 
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
-ynh_print_info "Removing nginx web server configuration"
+ynh_script_progression --message="Removing nginx web server configuration..."
 
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Removal of $app completed" --last

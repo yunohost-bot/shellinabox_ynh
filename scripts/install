@@ -27,37 +27,34 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_print_info "Validating installation parameters..."
-
-# Normalize the url path syntax
-path_url=$(ynh_normalize_url_path $path_url)
+ynh_script_progression --message="Validating installation parameters..."
 
 # Register (book) web path
-ynh_webpath_register $app $domain $path_url
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
-ynh_print_info "Storing installation settings..."
+ynh_script_progression --message="Storing installation settings..."
 
-ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app path $path_url
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path_url
 
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
-ynh_print_info "Looking for a free port..."
+ynh_script_progression --message="Configuring firewall..." --weight=2
 
 # Find a free port
-port=$(ynh_find_port 4200)
-ynh_app_setting_set $app port $port
+port=$(ynh_find_port --port=4200)
+ynh_app_setting_set --app=$app --key=port --value=$port
 
 #=================================================
 # INSTALL SHELLINABOX
 #=================================================
-ynh_print_info "Installing shellinabox..."
+ynh_script_progression --message="Installing shellinabox..." --weight=7
 
 ynh_package_update
 ynh_package_install shellinabox
@@ -65,7 +62,7 @@ ynh_package_install shellinabox
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info "Configuring nginx web server..."
+ynh_script_progression --message="Configuring nginx web server..." --weight=2
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -75,23 +72,23 @@ ynh_add_nginx_config
 #=================================================
 # CONFIGURE SHELLINABOX
 #=================================================
-ynh_print_info "Configuring shellinabox..."
+ynh_script_progression --message="Configuring shellinabox..." --weight=2
 
 cp ../conf/shellinabox /etc/default/shellinabox
-ynh_replace_string "__PORT__" "$port" "/etc/default/shellinabox"
+ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="/etc/default/shellinabox"
 
 # Allow the service to log in syslog
-ynh_replace_string " -- -q --background" " -- --background" "/etc/init.d/shellinabox"
+ynh_replace_string --match_string=" -- -q --background" --replace_string=" -- --background" --target_file="/etc/init.d/shellinabox"
 systemctl daemon-reload
 
-systemctl restart shellinabox
+ynh_systemd_action --service_name=shellinabox --action=restart
 
 #=================================================
 # STORE THE CHECKSUM OF THE CONFIG FILE
 #=================================================
 
 # Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum "/etc/default/shellinabox"
+ynh_store_file_checksum --file="/etc/default/shellinabox"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -104,12 +101,12 @@ yunohost service add $app
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info "Reloading nginx web server..."
+ynh_script_progression --message="Reloading nginx web server..."
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info "Installation of $app completed"
+ynh_script_progression --message="Installation of $app completed" --last

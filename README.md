@@ -29,9 +29,9 @@ Shell In A Box implements a web server that can export arbitrary command line to
 
 #### Supported architectures
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/shellinabox%20%28Official%29.svg)](https://ci-apps.yunohost.org/ci/apps/shellinabox/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/shellinabox%20%28Official%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/shellinabox/)
-* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/shellinabox%20%28Official%29.svg)](https://ci-stretch.nohost.me/ci/apps/shellinabox/)
+* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/shellinabox%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/shellinabox/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/shellinabox%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/shellinabox/)
+* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/shellinabox%20%28Apps%29.svg)](https://ci-stretch.nohost.me/ci/apps/shellinabox/)
 
 ## Limitations
 
@@ -41,6 +41,7 @@ Shell In A Box implements a web server that can export arbitrary command line to
 
  * Report a bug: https://github.com/YunoHost-Apps/shellinabox_ynh/issues
  * Shell In A Box website: https://github.com/shellinabox/shellinabox
+ * Shell In A Box repository: https://github.com/shellinabox/shellinabox
  * YunoHost website: https://yunohost.org/
 
 ---
