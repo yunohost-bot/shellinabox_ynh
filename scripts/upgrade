@@ -11,29 +11,29 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_print_info "Loading installation settings..."
+ynh_script_progression --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get $app domain)
-path_url=$(ynh_app_setting_get $app path)
-port=$(ynh_app_setting_get $app port)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+port=$(ynh_app_setting_get --app=$app --key=port)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_print_info "Ensuring downward compatibility..."
+ynh_script_progression --message="Ensuring downward compatibility..." --weight=2
 
 # If port doesn't exist, create it
 if [ -z "$port" ]; then
 	port=4200
-	ynh_app_setting_set $app port $port
+	ynh_app_setting_set --app=$app --key=port --value=$port
 fi
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_print_info "Backing up the app before upgrading (may take a while)..."
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=5
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -49,14 +49,14 @@ ynh_abort_if_errors
 #=================================================
 
 # Normalize the URL path syntax
-path_url=$(ynh_normalize_url_path $path_url)
+path_url=$(ynh_normalize_url_path --path_url=$path_url)
 
 #=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info "Upgrading nginx web server configuration..."
+ynh_script_progression --message="Upgrading nginx web server configuration..." --weight=2
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -64,36 +64,35 @@ ynh_add_nginx_config
 #=================================================
 # CONFIGURE SHELLINABOX
 #=================================================
-ynh_print_info "Upgrading shellinabox configuration..."
+ynh_script_progression --message="Upgrading shellinabox configuration..." --weight=4
 
 # Verify the checksum and backup the file if it's different
-ynh_backup_if_checksum_is_different "/etc/default/shellinabox"
+ynh_backup_if_checksum_is_different --file="/etc/default/shellinabox"
 
 cp ../conf/shellinabox /etc/default/shellinabox
-ynh_replace_string "__PORT__" "$port" "/etc/default/shellinabox"
+ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="/etc/default/shellinabox"
 
-# Allow the service to log in syslog
-ynh_replace_string " -- -q --background" " -- --background" "/etc/init.d/shellinabox"
+ynh_replace_string --match_string=" -- -q --background" --replace_string=" -- --background" --target_file="/etc/init.d/shellinabox"
 systemctl daemon-reload
 
-systemctl restart shellinabox
+ynh_systemd_action --service_name=shellinabox --action=restart
 
 #=================================================
 # STORE THE CHECKSUM OF THE CONFIG FILE
 #=================================================
 
 # Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum "/etc/default/shellinabox"
+ynh_store_file_checksum --file="/etc/default/shellinabox"
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info "Reloading nginx web server..."
+ynh_script_progression --message="Reloading nginx web server..."
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info "Upgrade of $app completed"
+ynh_script_progression --message="Upgrade of $app completed" --last
