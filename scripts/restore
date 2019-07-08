@@ -3,34 +3,36 @@
 #=================================================
 # GENERIC START
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-# Exit on command errors and treat access to unset variables as an error
-set -eu
-
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
 source /usr/share/yunohost/helpers
 
 #=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_script_progression --message="Loading settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get $app domain)
-path_url=$(ynh_app_setting_get $app path)
-port=$(ynh_app_setting_get $app port)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+port=$(ynh_app_setting_get --app=$app --key=port)
 
 #=================================================
 # CHECK IF THE APP CAN BE RESTORED
 #=================================================
+ynh_script_progression --message="Validating restoration parameters..."
 
-ynh_webpath_available $domain $path_url \
-	|| ynh_die "Path not available: ${domain}${path_url}"
+ynh_webpath_available --domain=$domain --path_url=$path_url \
+	|| ynh_die --message="Path not available: ${domain}${path_url}"
 
 #=================================================
 # STANDARD RESTORATION STEPS
@@ -38,11 +40,12 @@ ynh_webpath_available $domain $path_url \
 # RESTORE THE NGINX CONFIGURATION
 #=================================================
 
-ynh_restore_file "/etc/nginx/conf.d/$domain.d/$app.conf"
+ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
 # INSTALL SHELLINABOX
 #=================================================
+ynh_script_progression --message="Installing shellinabox..." --weight=7
 
 ynh_package_update
 ynh_package_install shellinabox
@@ -50,15 +53,17 @@ ynh_package_install shellinabox
 #=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================
+ynh_script_progression --message="Restoring the app main directory..." --weight=3
 
-ynh_restore_file "/etc/shellinabox"
-ynh_restore_file "/etc/default/shellinabox"
+ynh_restore_file --origin_path="/etc/shellinabox"
+ynh_restore_file --origin_path="/etc/default/shellinabox"
 
 # Allow the service to log in syslog
-ynh_replace_string " -- -q --background" " -- --background" "/etc/init.d/shellinabox"
+ynh_replace_string --match_string=" -- -q --background" --replace_string=" -- --background" --target_file="/etc/init.d/shellinabox"
+
 systemctl daemon-reload
 
-systemctl restart shellinabox
+ynh_systemd_action --service_name=shellinabox --action=restart
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
@@ -71,5 +76,12 @@ yunohost service add $app
 #=================================================
 # RELOAD NGINX
 #=================================================
+ynh_script_progression --message="Reloading nginx web server..."
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Restoration completed for $app" --last
