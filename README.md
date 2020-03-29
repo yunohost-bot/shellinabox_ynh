@@ -1,6 +1,6 @@
 # Shell In A Box for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/shellinabox.svg)](https://dash.yunohost.org/appci/app/shellinabox)  
+[![Integration level](https://dash.yunohost.org/integration/shellinabox.svg)](https://dash.yunohost.org/appci/app/shellinabox) ![](https://ci-apps.yunohost.org/ci/badges/shellinabox.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/shellinabox.maintain.svg)  
 [![Install Shell In A Box with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=shellinabox)
 
 > *This package allow you to install Shell In A Box quickly and simply on a YunoHost server.  
