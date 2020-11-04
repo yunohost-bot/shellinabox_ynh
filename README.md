@@ -29,9 +29,8 @@ Shell In A Box implements a web server that can export arbitrary command line to
 
 #### Supported architectures
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/shellinabox%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/shellinabox/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/shellinabox%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/shellinabox/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/shellinabox%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/shellinabox/)
-* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/shellinabox%20%28Apps%29.svg)](https://ci-stretch.nohost.me/ci/apps/shellinabox/)
 
 ## Limitations
 
@@ -46,10 +45,8 @@ Shell In A Box implements a web server that can export arbitrary command line to
 
 ---
 
-Developers info
-----------------
+## Developers info
 
-**Only if you want to use a testing branch for coding, instead of merging directly into master.**
 Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/shellinabox_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
