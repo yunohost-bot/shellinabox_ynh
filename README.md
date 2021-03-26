@@ -1,7 +1,7 @@
 # Shell In A Box for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/shellinabox.svg)](https://dash.yunohost.org/appci/app/shellinabox) ![](https://ci-apps.yunohost.org/ci/badges/shellinabox.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/shellinabox.maintain.svg)  
-[![Install Shell In A Box with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=shellinabox)
+[![Install Shell In A Box with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=shellinabox)
 
 > *This package allow you to install Shell In A Box quickly and simply on a YunoHost server.  
 If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to know how to install and enjoy it.*
@@ -10,7 +10,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 
 Shell In A Box implements a web server that can export arbitrary command line tools to a web based terminal emulator. This emulator is accessible to any JavaScript and CSS enabled web browser and does not require any additional browser plugins.
 
-**Shipped version:** Current Debian version.
+**Shipped version:** 2.21 (current Debian version)
 
 ## Screenshots
 
