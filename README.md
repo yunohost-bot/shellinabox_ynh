@@ -29,8 +29,8 @@ Shell In A Box implements a web server that can export arbitrary command line to
 
 #### Supported architectures
 
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/shellinabox%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/shellinabox/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/shellinabox%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/shellinabox/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/shellinabox.svg)](https://ci-apps.yunohost.org/ci/apps/shellinabox/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/shellinabox.svg)](https://ci-apps-arm.yunohost.org/ci/apps/shellinabox/)
 
 ## Limitations
 
