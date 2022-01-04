@@ -42,7 +42,7 @@ ynh_package_autopurge shellinabox
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Removing NGINX web server configuration..."
+ynh_script_progression --message="Removing NGINX web server configuration..." --weight=1
 
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
