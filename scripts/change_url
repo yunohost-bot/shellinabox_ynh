@@ -68,7 +68,7 @@ fi
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping shellinabox..."
+ynh_script_progression --message="Stopping shellinabox..." --weight=1
 
 ynh_systemd_action --service_name=shellinabox --action=stop
 

@@ -28,14 +28,6 @@ path_url=$(ynh_app_setting_get --app=$app --key=path)
 port=$(ynh_app_setting_get --app=$app --key=port)
 
 #=================================================
-# CHECK IF THE APP CAN BE RESTORED
-#=================================================
-ynh_script_progression --message="Validating restoration parameters..."
-
-ynh_webpath_available --domain=$domain --path_url=$path_url \
-	|| ynh_die --message="Path not available: ${domain}${path_url}"
-
-#=================================================
 # STANDARD RESTORATION STEPS
 #=================================================
 # RESTORE THE NGINX CONFIGURATION
@@ -70,15 +62,16 @@ ynh_systemd_action --service_name=shellinabox --action=restart
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
-yunohost service add $app
+yunohost service add $app --description="Web based AJAX terminal emulator"
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
