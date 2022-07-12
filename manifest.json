@@ -17,8 +17,8 @@
     },
     "license": "GPL-2.0",
     "maintainer": {
-        "name": "kload",
-        "email": "kload@kload.fr"
+        "name": "",
+        "email": ""
     },
     "requirements": {
         "yunohost": ">= 4.3.0"
