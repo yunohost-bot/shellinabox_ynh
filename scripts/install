@@ -13,6 +13,9 @@ source /usr/share/yunohost/helpers
 # MANAGE SCRIPT FAILURE
 #=================================================
 
+ynh_clean_setup () {
+	ynh_clean_check_starting
+}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
@@ -48,14 +51,14 @@ ynh_app_setting_set --app=$app --key=path --value=$path_url
 #=================================================
 ynh_script_progression --message="Finding an available port..." --weight=2
 
-# Find a free port
+# Find an available port
 port=$(ynh_find_port --port=4200)
 ynh_app_setting_set --app=$app --key=port --value=$port
 
 #=================================================
-# INSTALL SHELLINABOX
+# INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing shellinabox..." --weight=7
+ynh_script_progression --message="Installing dependencies..." --weight=7
 
 ynh_package_update
 ynh_install_app_dependencies $pkg_dependencies
@@ -65,32 +68,43 @@ ynh_install_app_dependencies $pkg_dependencies
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --weight=2
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
-# CONFIGURE SHELLINABOX
+# ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring shellinabox..." --weight=2
+ynh_script_progression --message="Adding a configuration file..." --weight=2
 
 ynh_add_config --template="../conf/shellinabox" --destination="/etc/default/shellinabox"
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_script_progression --message="Configuring a systemd service..."
 
 # Allow the service to log in syslog
 ynh_replace_string --match_string=" -- -q --background" --replace_string=" -- --background" --target_file="/etc/init.d/shellinabox"
 systemctl daemon-reload
 
-ynh_systemd_action --service_name=shellinabox --action=restart
-
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
+# INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 yunohost service add $app --description="Web based AJAX terminal emulator"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..."
+
+# Start a systemd service
+ynh_systemd_action --service_name=shellinabox --action=restart
 
 #=================================================
 # RELOAD NGINX
