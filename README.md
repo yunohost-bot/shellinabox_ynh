@@ -5,7 +5,8 @@ It shall NOT be edited by hand.
 
 # Shell In A Box for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/shellinabox.svg)](https://dash.yunohost.org/appci/app/shellinabox) ![Working status](https://ci-apps.yunohost.org/ci/badges/shellinabox.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/shellinabox.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/shellinabox.svg)](https://dash.yunohost.org/appci/app/shellinabox) ![Working status](https://ci-apps.yunohost.org/ci/badges/shellinabox.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/shellinabox.maintain.svg)
+
 [![Install Shell In A Box with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=shellinabox)
 
 *[Lire ce readme en français.](./README_fr.md)*
