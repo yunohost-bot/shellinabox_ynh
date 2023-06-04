@@ -1,0 +1,46 @@
+packaging_format = 2
+
+id = "shellinabox"
+name = "Shell In A Box"
+description.en = "Web based AJAX terminal emulator"
+description.fr = "Émulateur de terminal web"
+
+version = "2.21~ynh4"
+
+maintainers = []
+
+[upstream]
+license = "GPL-2.0"
+website = "https://code.google.com/archive/p/shellinabox/"
+admindoc = "https://github.com/shellinabox/shellinabox/wiki/shellinaboxd_man"
+userdoc = "https://code.google.com/p/shellinabox/wiki/shellinaboxd_man"
+code = "https://github.com/shellinabox/shellinabox"
+
+[integration]
+yunohost = ">= 11.1.19"
+architectures = "all"
+multi_instance = false
+ldap = false
+sso = false
+disk = "50M"
+ram.build = "200M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/ssh"
+
+[resources]
+
+    [resources.ports]
+    main.default = 4200
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.apt]
+    packages = "shellinabox"

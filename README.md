@@ -5,7 +5,8 @@ It shall NOT be edited by hand.
 
 # Shell In A Box for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/shellinabox.svg)](https://dash.yunohost.org/appci/app/shellinabox) ![Working status](https://ci-apps.yunohost.org/ci/badges/shellinabox.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/shellinabox.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/shellinabox.svg)](https://dash.yunohost.org/appci/app/shellinabox) ![Working status](https://ci-apps.yunohost.org/ci/badges/shellinabox.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/shellinabox.maintain.svg)
+
 [![Install Shell In A Box with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=shellinabox)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -18,7 +19,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 Shell In A Box implements a web server that can export arbitrary command line tools to a web based terminal emulator. This emulator is accessible to any JavaScript and CSS enabled web browser and does not require any additional browser plugins.
 
 
-**Shipped version:** 2.21~ynh3
+**Shipped version:** 2.21~ynh4
 
 ## Screenshots
 
