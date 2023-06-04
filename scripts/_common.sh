@@ -5,7 +5,7 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="shellinabox"
+#REMOVEME? pkg_dependencies="shellinabox"
 
 #=================================================
 # PERSONAL HELPERS
