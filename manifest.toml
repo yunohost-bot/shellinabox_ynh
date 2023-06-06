@@ -34,6 +34,10 @@ ram.runtime = "50M"
     type = "path"
     default = "/ssh"
 
+    [install.init_main_permission]
+    type = "group"
+    default = "admins"
+
 [resources]
 
     [resources.ports]
