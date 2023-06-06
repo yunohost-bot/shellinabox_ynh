@@ -41,6 +41,7 @@ ram.runtime = "50M"
 
     [resources.permissions]
     main.url = "/"
+    main.show_tile = true
 
     [resources.apt]
     packages = "shellinabox"
