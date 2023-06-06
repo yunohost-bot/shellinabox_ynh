@@ -34,10 +34,6 @@ ram.runtime = "50M"
     type = "path"
     default = "/ssh"
 
-    [install.init_main_permission]
-    type = "group"
-    default = "admins"
-
 [resources]
 
     [resources.ports]
@@ -45,6 +41,7 @@ ram.runtime = "50M"
 
     [resources.permissions]
     main.url = "/"
+    main.allowed = "admins"
 
     [resources.apt]
     packages = "shellinabox"
