@@ -39,8 +39,8 @@ ram.runtime = "50M"
     [resources.ports]
     main.default = 4200
 
-    [resources.permissions]
-    main.url = "/"
+    #[resources.permissions]
+    #main.url = "/"
 
     [resources.apt]
     packages = "shellinabox"
