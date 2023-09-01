@@ -30,6 +30,10 @@ ram.runtime = "50M"
     [install.domain]
     type = "domain"
 
+    [install.init_main_permission]
+    type = "group"
+    default = "admins"
+
     [install.path]
     type = "path"
     default = "/ssh"
