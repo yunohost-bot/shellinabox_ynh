@@ -43,7 +43,6 @@ ram.runtime = "50M"
     [resources.system_user]
 
     [resources.ports]
-    main.default = 4200
 
     [resources.permissions]
     main.url = "/"
