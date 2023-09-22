@@ -15,4 +15,4 @@ SHELLINABOX_GROUP=__APP__
 #
 #   Beeps are disabled because of reports of the VLC plugin crashing
 #   Firefox on Linux/x86_64.
-SHELLINABOX_ARGS="--no-beep --localhost-only --disable-ssl"
+SHELLINABOX_ARGS="--no-beep --localhost-only --disable-ssl –cert-fd=fd"
