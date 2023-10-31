@@ -31,7 +31,7 @@ Shell In A Box implements a web server that can export arbitrary command line to
 * Documentation officielle utilisateur : <https://code.google.com/p/shellinabox/wiki/shellinaboxd_man>
 * Documentation officielle de l’admin : <https://github.com/shellinabox/shellinabox/wiki/shellinaboxd_man>
 * Dépôt de code officiel de l’app : <https://github.com/shellinabox/shellinabox>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_shellinabox>
+* YunoHost Store: <https://apps.yunohost.org/app/shellinabox>
 * Signaler un bug : <https://github.com/YunoHost-Apps/shellinabox_ynh/issues>
 
 ## Informations pour les développeurs
