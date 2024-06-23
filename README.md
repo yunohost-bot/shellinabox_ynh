@@ -9,7 +9,7 @@ It shall NOT be edited by hand.
 
 [![Install Shell In A Box with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=shellinabox)
 
-*[Read this README is other languages.](./ALL_README.md)*
+*[Read this README in other languages.](./ALL_README.md)*
 
 > *This package allows you to install Shell In A Box quickly and simply on a YunoHost server.*  
 > *If you don't have YunoHost, please consult [the guide](https://yunohost.org/install) to learn how to install it.*
@@ -24,6 +24,10 @@ Shell In A Box implements a web server that can export arbitrary command line to
 ## Screenshots
 
 ![Screenshot of Shell In A Box](./doc/screenshots/screenshot.gif)
+
+## :red_circle: Antifeatures
+
+- **Upstream not maintained**: This software is not maintained anymore. Expect it to break down over time, be exposed to unfixed security breaches, etc.
 
 ## Documentation and resources
 
